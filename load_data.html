@@ -1,0 +1,151 @@
+<!Doctype html>
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<title> Loader </title>
+<style type="text/css">
+
+body{
+	background-color: #3ea39c;
+}
+
+h1 {
+position: absolute;
+    top: 42%;
+    left: 35%;
+    margin-top: -55px;
+    margin-left: -65px;
+    width: 600px;
+    height: 100px;
+    text-align: center;
+    font-family: "Arial Black", Gadget, sans-serif;
+
+}
+
+#pos {
+  position: absolute;
+    top: 50%;
+    left: 25%;
+    margin-top: -50px;
+    margin-left: -75px;
+    width: 600px;
+    height: 100px;
+}
+
+#progress-bar {
+
+  position:relative;
+  border:1px solid rgba(0,0,0,0.8);
+  width:890px;
+  height:20px;
+  background:repeating-linear-gradient(-45deg, red, red 20px, orangered 20px, orangered 40px);
+  border-radius:0.8em;
+  animation: roll 3.5s linear;
+  box-shadow: 
+    inset 0 10px 10px rgba(255,255,255,0.2), 
+    inset 0 1px 0 rgba(255,255,255,0.3), 
+    inset 0 -5px 3px rgba(0,0,0,0.2),
+    0 3px 2px rgba(0,0,0,0.3);
+}
+
+#progress-bar:after {
+ 	width:900px;
+	height:28px;
+  border:1px solid rgba(0,0,0,0.8);
+  background:#333;
+  border-radius:1em;
+  display:block;
+  content:"";
+  position:absolute;
+  left:-5px;
+  top:-5px;
+  z-index:-1;
+}
+
+@-moz-keyframes roll {
+	0% { width:0; }
+  100% { width:900px; }
+}
+
+@-webkit-keyframes roll {
+	0% { width:0; }
+  100% { width:895px; }
+}
+
+
+</style>
+
+</head>
+<body>
+<div id="messages">
+<h1>Loading...</h1>
+</div>
+
+<script type="text/javascript">
+
+
+
+jQuery(document).ready(function($){
+
+function nextMsg() {
+    if (messages.length == 0) {
+        $('#messages h1').html("Completed! Please close the tab..").fadeIn(200);
+    } else {
+        // change content of message, fade in, wait, fade out and continue with next message
+        $('#messages h1').html(messages.pop()).fadeIn(200).delay(200).fadeOut(200, nextMsg);
+    }
+};
+// list of messages to display
+var messages = [
+    "Creating Database",
+    "Establishing connection",
+    "Reading data from file",
+    "Uploading Data",
+    "Terminating all connections"
+    ].reverse();
+
+// initially hide the message
+$('#messages h1').hide();
+
+// start animation
+nextMsg();
+
+  var p = $.getJSON("load_data.php", function(result) 
+  {  	
+    if(result == true)
+    {					
+      console.log("Completed! - Please close tab");       
+  	}
+    else
+      console.log("Error Occured!");
+  });
+
+setTimeout(function(){ p.abort(); }, 12000);
+
+ 
+ });
+
+
+</script>
+
+
+<div id="pos">
+<div id="progress-bar"></div>
+</div>
+
+<p></p>
+
+
+
+
+
+</body>
